@@ -21,7 +21,7 @@ public class CreatingCourierTest {
     private final CourierSteps courierSteps = new CourierSteps();
     private String login;
     private String password;
-    private String firstName;
+    //private String firstName;
 
 
     @Before
@@ -29,7 +29,7 @@ public class CreatingCourierTest {
     public void prepareTestData() {
         login = RandomStringUtils.randomAlphanumeric(10);
         password = RandomStringUtils.randomAlphanumeric(10);
-        firstName = RandomStringUtils.randomAlphabetic(10);
+        // firstName = RandomStringUtils.randomAlphabetic(10);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class CreatingCourierTest {
     @Description("Тест проверяет API создания нового курьера. ОР - ok:true ")
     public void ShouldReturnOkTrueAfterCreateCourierTest() {
         courierSteps
-                .createCourier(login, password, firstName)
+                .createCourier(login, password)
                 .statusCode(SC_CREATED)
                 .body("ok", is(true));
         ;
@@ -48,11 +48,11 @@ public class CreatingCourierTest {
     @Description("Тест проверяет возможность создать двух одинаковых курьеров. ОР - 409 Conflict")
     public void ShouldReturnConflictForDuplicatedCourierTest() {
         courierSteps
-                .createCourier(login, password, firstName)
+                .createCourier(login, password)
                 .statusCode(SC_CREATED)
                 .body("ok", is(true));
         courierSteps
-                .createCourier(login, password, firstName)
+                .createCourier(login, password)
                 .statusCode(SC_CONFLICT)
                 .body("message", equalTo("Этот логин уже используется"));
         ;
@@ -64,7 +64,7 @@ public class CreatingCourierTest {
     @Description("Тест проверяет API создания нового курьера без входных данных. ОР - 400 Bad Request, новый курьер НЕ создан")
     public void ShouldReturnBadRequestWithoutAllParams() {
         courierSteps
-                .createCourier(this.login = "", this.password = "", this.firstName = "")
+                .createCourier(this.login = "", this.password = "")
                 .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для создания учетной записи"));
     }
@@ -74,7 +74,7 @@ public class CreatingCourierTest {
     @Description("Тест проверяет API создания нового курьера без входных данных. ОР - 400 Bad Request, новый курьер НЕ создан")
     public void ShouldReturnBadRequestWithEmptyLoginTest() {
         courierSteps
-                .createCourier(this.login = "", password, firstName)
+                .createCourier(this.login = "", password)
                 .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для создания учетной записи"));
         ;
@@ -86,7 +86,7 @@ public class CreatingCourierTest {
     @Description("Тест проверяет API создания нового курьера без входных данных. ОР - 400 Bad Request, новый курьер НЕ создан")
     public void ShouldReturnBadRequestWithEmptyPasswordTest() {
         courierSteps
-                .createCourier(login, this.password = "", firstName)
+                .createCourier(login, this.password = "")
                 .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для создания учетной записи"));
         ;

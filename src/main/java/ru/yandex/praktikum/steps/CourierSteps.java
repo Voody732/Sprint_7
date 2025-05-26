@@ -13,11 +13,11 @@ import static ru.yandex.praktikum.StaticUrls.*;
 public class CourierSteps {
 
     @Step("Отправка запроса на создание курьера")
-    public ValidatableResponse createCourier(String login, String password, String firstName) {
+    public ValidatableResponse createCourier(String login, String password) {
         CreateCourierRequest request = new CreateCourierRequest();
         request.setLogin(login);
         request.setPassword(password);
-        request.setFirstName(firstName);
+        // request.setFirstName(firstName);
         return given()
                 .contentType(ContentType.JSON)
                 .baseUri(BASEURL)

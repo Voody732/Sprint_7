@@ -33,7 +33,8 @@ public class OrderSteps {
                 .post(CREATE_ORDER_HANDLER)
                 .then();
     }
-    public ValidatableResponse cancelOrder(CancelOrderRequest request){
+
+    public ValidatableResponse cancelOrder(CancelOrderRequest request) {
         return given()
                 .contentType(ContentType.JSON)
                 .baseUri(BASEURL)
@@ -43,5 +44,12 @@ public class OrderSteps {
                 .then();
     }
 
-
+    public ValidatableResponse getOrderList() {
+        return given()
+                .contentType(ContentType.JSON)
+                .baseUri(BASEURL)
+                .when()
+                .get(ORDER_LIST_HANDLER)
+                .then();
+    }
 }

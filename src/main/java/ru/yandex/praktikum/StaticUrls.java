@@ -7,4 +7,5 @@ public class StaticUrls {
     public static final String DELETE_COURIER_HANDLER = "/api/v1/courier/{id}";
     public static final String CREATE_ORDER_HANDLER = "/api/v1/orders";
     public static final String DELETE_ORDER_HANDLER= "/api/v1/orders/cancel";
+    public static final String ORDER_LIST_HANDLER = "/api/v1/orders";
 }

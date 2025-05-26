@@ -19,7 +19,6 @@ public class LoggingCourierTest {
     private final CourierSteps courierSteps = new CourierSteps();
     private String login;
     private String password;
-    private String firstName;
     private String addToLogin;
     private String addToPassword;
 
@@ -28,20 +27,18 @@ public class LoggingCourierTest {
     public void prepareTestData() {
         login = RandomStringUtils.randomAlphanumeric(10);
         password = RandomStringUtils.randomAlphanumeric(10);
-        firstName = RandomStringUtils.randomAlphabetic(10);
         addToLogin = RandomStringUtils.randomAlphanumeric(3);
         addToPassword = RandomStringUtils.randomAlphanumeric(3);
+        courierSteps
+                .createCourier(login, password)
+                .statusCode(SC_CREATED)
+                .body("ok", is(true));
     }
 
     @Test
     @DisplayName("Логин курьера в систему")
     @Description("Тест проверяет API логина курьера. ОР - 200 OK, курьер залогинился в системе, возвращается его id")
     public void ShouldReturnIdAfterLoginTest() {
-        courierSteps
-                .createCourier(login, password, firstName)
-                .statusCode(SC_CREATED)
-                .body("ok", is(true));
-
         courierSteps
                 .LoggingCourier(login, password)
                 .statusCode(SC_OK)
@@ -53,10 +50,6 @@ public class LoggingCourierTest {
     @Description("Тест проверяет API логина курьера. ОР - 400 Bad Request, курьер НЕ залогинился в системе")
     public void ShouldReturnBadRequestWithoutAllParams() {
         courierSteps
-                .createCourier(login, password, firstName)
-                .statusCode(SC_CREATED)
-                .body("ok", is(true));
-        courierSteps
                 .LoggingCourier(this.login = "", this.password = "")
                 .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для входа"));
@@ -66,10 +59,6 @@ public class LoggingCourierTest {
     @DisplayName("Попытка логина курьера в систему без логина")
     @Description("Тест проверяет API логина курьера. ОР - 400 Bad Request, курьер НЕ залогинился в системе")
     public void ShouldReturnBadRequestWithoutLogin() {
-        courierSteps
-                .createCourier(login, password, firstName)
-                .statusCode(SC_CREATED)
-                .body("ok", is(true));
         courierSteps
                 .LoggingCourier(this.login = "", password)
                 .statusCode(SC_BAD_REQUEST)
@@ -81,10 +70,6 @@ public class LoggingCourierTest {
     @Description("Тест проверяет API логина курьера. ОР - 400 Bad Request, курьер НЕ залогинился в системе")
     public void ShouldReturnBadRequestWithoutPassword() {
         courierSteps
-                .createCourier(login, password, firstName)
-                .statusCode(SC_CREATED)
-                .body("ok", is(true));
-        courierSteps
                 .LoggingCourier(login, this.password = "")
                 .statusCode(SC_BAD_REQUEST)
                 .body("message", equalTo("Недостаточно данных для входа"));
@@ -95,10 +80,6 @@ public class LoggingCourierTest {
     @Description("Тест проверяет API логина курьера. ОР - 404 Not Found, курьер НЕ залогинился в системе")
     public void ShouldReturnNotFoundWithIncorrectLogin() {
         courierSteps
-                .createCourier(login, password, firstName)
-                .statusCode(SC_CREATED)
-                .body("ok", is(true));
-        courierSteps
                 .LoggingCourier(this.login = login + addToLogin, password)
                 .statusCode(SC_NOT_FOUND)
                 .body("message", equalTo("Учетная запись не найдена"));
@@ -108,10 +89,6 @@ public class LoggingCourierTest {
     @DisplayName("Попытка логина курьера с некорректным логином")
     @Description("Тест проверяет API логина курьера. ОР - 404 Not Found, курьер НЕ залогинился в системе")
     public void ShouldReturnNotFoundWithIncorrectPassword() {
-        courierSteps
-                .createCourier(login, password, firstName)
-                .statusCode(SC_CREATED)
-                .body("ok", is(true));
         courierSteps
                 .LoggingCourier(login, this.password = password + addToPassword)
                 .statusCode(SC_NOT_FOUND)
